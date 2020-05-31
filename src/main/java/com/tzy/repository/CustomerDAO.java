@@ -65,10 +65,10 @@ public class CustomerDAO {
     }
 
 
-    public void createCustomer(final Customer customer){
+    public void createCustomer( Customer customer){
         JdbcTemplate template = new JdbcTemplate();
 
-        final String sql = "insert into customers (id,name,password,email) values (?,?,?,?)";
+        String sql = "insert into customers (id,name,password,email) values (?,?,?,?)";
 
 
         logger.info("begin updating.");
