@@ -1,13 +1,25 @@
 package com.tzy.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
+@Entity
+@Table(name = "coffee_order")
 public class CoffeeOrder {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "order_time")
     private LocalDateTime order_time;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "total")
     private BigDecimal total;
 
 

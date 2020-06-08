@@ -1,9 +1,25 @@
 package com.tzy.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "customers")
 public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
 
     public Customer(){
@@ -53,5 +69,7 @@ public class Customer {
 
 
 
+
 }
+
 

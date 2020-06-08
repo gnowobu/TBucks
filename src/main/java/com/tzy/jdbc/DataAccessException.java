@@ -1,4 +1,4 @@
-package com.tzy.repository;
+package com.tzy.jdbc;
 
 public class DataAccessException extends RuntimeException {
 

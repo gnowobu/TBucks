@@ -1,5 +1,6 @@
 package com.tzy.repository;
 
+import com.tzy.jdbc.CustomerDAOjdbc;
 import com.tzy.model.Customer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -8,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerDaoTest {
 
-    CustomerDAO dao;
+    CustomerDAOjdbc dao;
     @BeforeEach
     void setUp() {
-        dao = new CustomerDAO();
+        dao = new CustomerDAOjdbc();
     }
 
     @AfterEach

@@ -1,4 +1,4 @@
-package com.tzy.repository;
+package com.tzy.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

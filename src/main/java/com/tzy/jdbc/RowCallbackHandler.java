@@ -1,4 +1,4 @@
-package com.tzy.repository;
+package com.tzy.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

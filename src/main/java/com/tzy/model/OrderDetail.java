@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 
 public class OrderDetail {
+
     private long id;
     private Coffee coffee; //foreign key constraint
     private CoffeeOrder order;

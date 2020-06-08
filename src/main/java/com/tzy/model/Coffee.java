@@ -1,14 +1,22 @@
 package com.tzy.model;
 
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-
+@Entity
+@Table(name = "coffee")
 public class Coffee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "type")
     private String type;
 
     public long getId() {

@@ -1,4 +1,4 @@
-package com.tzy.repository;
+package com.tzy.jdbc;
 
 import com.tzy.model.Customer;
 import org.slf4j.Logger;
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDAO {
+public class CustomerDAOjdbc {
     static final String DBURL = "jdbc:postgresql://localhost:5432/TBucks";
     static final String USER = "test";
     static final String PASS = "test";
@@ -117,10 +117,13 @@ public class CustomerDAO {
 
 
     public static void main(String[] args){
-        CustomerDAO dao = new CustomerDAO();
+        CustomerDAOjdbc dao = new CustomerDAOjdbc();
 
         dao.getCustomers();
 
+
+        List<Integer> list = new ArrayList<>();
+        
     }
 
 
