@@ -2,6 +2,7 @@ package com.tzy.util;
 
 
 import com.github.fluent.hibernate.cfg.scanner.EntityScanner;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -15,7 +16,10 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.AppConfigurationEntry;
 
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class HibernateUtil {
     private static SessionFactory sessionFactory; //singleton
@@ -42,6 +46,7 @@ public class HibernateUtil {
             settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
             configuration.setProperties(settings);
             EntityScanner.scanPackages(modelPackages).addTo(configuration);
+            File file =  new File(" ");
 
             StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
 

@@ -1,53 +1,54 @@
 package com.tzy.repository;
 
 import com.tzy.model.Coffee;
+import com.tzy.model.Order;
 import com.tzy.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoffeeDaoimpl implements CoffeeDao {
-
+public class OrderDaoImp implements OrderDao {
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
-    public List<Coffee> getCoffee() {
-        String hql = "FROM Coffee";
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session s = sessionFactory.openSession();
+    public List<Order> getOrders() {
 
-        List<Coffee> res = new ArrayList<>();
-        try {
-            Query query = s.createQuery(hql);
+        String hql = "FROM Order";
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        List<Order> res = new ArrayList<>();
+        try{
+            transaction = s.beginTransaction();
+            Query<Order> query = s.createQuery(hql);
             res = query.list();
-            s.close();
-
+            transaction.commit();
         } catch (HibernateException e){
-            logger.error("session close exception，try again");
+            logger.error("Exception happened");
+            transaction.rollback();
+        } finally {
             s.close();
         }
         return res;
     }
 
     @Override
-    public Coffee save(Coffee coffee) {
+    public Order save(Order order) {
 
         Transaction transaction = null;
         Session s = HibernateUtil.getSessionFactory().openSession();
 
         try {
             transaction = s.beginTransaction();
-            s.save(coffee);
+            s.save(order);
             transaction.commit();
             s.close();
-            return coffee;
+            return order;
         } catch (Exception e){
             if(transaction != null) transaction.rollback();
             logger.error("failure to insert record", e);
@@ -58,9 +59,8 @@ public class CoffeeDaoimpl implements CoffeeDao {
     }
 
     @Override
-    public boolean delete(Coffee coffee) {
-
-        String hql = "DELETE Coffee as cof where cof.id = :Id";//":Id" displays the id, "Id" is just a variable name.
+    public boolean delete(Order order) {
+        String hql = "DELETE Order as order where order.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -68,11 +68,11 @@ public class CoffeeDaoimpl implements CoffeeDao {
         try{
             transaction = s.beginTransaction();
             Query<Coffee> query = s.createQuery(hql);
-            query.setParameter("Id",coffee.getId());
+            query.setParameter("Id",order.getId());
             deletedCount = query.executeUpdate();
             transaction.commit();
             s.close();
-            return deletedCount >= 1 ? true:false;
+            return deletedCount >= 1;
         } catch (HibernateException e){
             if(transaction != null)
                 transaction.rollback();
@@ -82,28 +82,5 @@ public class CoffeeDaoimpl implements CoffeeDao {
         }
 
         return false;
-    }
-
-    @Override
-    public Coffee getBy(Long id) {
-        String hql = "FROM Coffee cof where cof.id = :Id";
-        List<Coffee> res =  new ArrayList<>();
-
-        Session s =  HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-        try {
-            transaction = s.beginTransaction();
-            Query<Coffee> query = s.createQuery(hql);
-            query.setParameter("Id",id);
-            res = query.list();
-            transaction.commit();
-
-        } catch (HibernateException e){
-            transaction.rollback();
-            logger.error("transaction terminated");
-        } finally {
-            s.close();
-        }
-        return res.get(0);
     }
 }

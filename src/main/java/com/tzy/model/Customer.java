@@ -10,7 +10,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @JoinColumn(name = "id")
     private long id;
 
     @Column(name = "name")
@@ -21,6 +21,8 @@ public class Customer {
 
     @Column(name = "email")
     private String email;
+
+
 
     public Customer(){
 
