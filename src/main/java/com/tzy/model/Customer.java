@@ -22,10 +22,12 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Order> orders;
+
 
 
     public Customer(){
-
     }
 
     public Customer(long id, String name, String password, String email) {
@@ -69,6 +71,13 @@ public class Customer {
         this.email = email;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
 
 

@@ -1,6 +1,7 @@
 package com.tzy.repository;
 
 import com.tzy.model.Coffee;
+import com.tzy.model.Customer;
 import com.tzy.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -11,21 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CoffeeDaoimpl implements CoffeeDao {
-
+public class CustomerDaoImp implements CustomerDao{
     private Logger logger = LoggerFactory.getLogger(getClass());
-    @Override
-    public List<Coffee> getCoffee() {
-        String hql = "FROM Coffee";
+
+    public List<Customer> getCustomer(){
+
+        String hql = "FROM Customer";
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session s = sessionFactory.openSession();
 
-        List<Coffee> res = new ArrayList<>();
+        List<Customer> res = new ArrayList<>();
         try {
             Query query = s.createQuery(hql);
             res = query.list();
@@ -36,20 +36,20 @@ public class CoffeeDaoimpl implements CoffeeDao {
             s.close();
         }
         return res;
+
     }
 
-    @Override
-    public Coffee save(Coffee coffee) {
+    public Customer save(Customer customer){
 
         Transaction transaction = null;
         Session s = HibernateUtil.getSessionFactory().openSession();
 
         try {
             transaction = s.beginTransaction();
-            s.save(coffee);
+            s.save(customer);
             transaction.commit();
             s.close();
-            return coffee;
+            return customer;
         } catch (Exception e){
             if(transaction != null) transaction.rollback();
             logger.error("failure to insert record", e);
@@ -59,10 +59,8 @@ public class CoffeeDaoimpl implements CoffeeDao {
 
     }
 
-    @Override
-    public boolean delete(Coffee coffee) {
-
-        String hql = "DELETE Coffee as cof where cof.id = :Id";//":Id" displays the id, "Id" is just a variable name.
+    public boolean delete(Customer customer){
+        String hql = "DELETE Customer as c where c.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
         Session s = HibernateUtil.getSessionFactory().openSession();
@@ -70,7 +68,7 @@ public class CoffeeDaoimpl implements CoffeeDao {
         try{
             transaction = s.beginTransaction();
             Query<Coffee> query = s.createQuery(hql);
-            query.setParameter("Id",coffee.getId());
+            query.setParameter("Id",customer.getId());
             deletedCount = query.executeUpdate();
             transaction.commit();
             s.close();
@@ -86,26 +84,44 @@ public class CoffeeDaoimpl implements CoffeeDao {
         return false;
     }
 
-    @Override
-    public Coffee getBy(Long id) {
-        String hql = "FROM Coffee cof where cof.id = :Id";
-        List<Coffee> res =  new ArrayList<>();
+    public Customer getByName(String name){
 
-        Session s =  HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
+        String hql = "SELECT FROM Customer where name = :name";
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session s = sessionFactory.openSession();
+        Customer customer = new Customer();
+
         try {
-            transaction = s.beginTransaction();
-            Query<Coffee> query = s.createQuery(hql);
-            query.setParameter("Id",id);
-            res = query.list();
-            transaction.commit();
+
+            Query query = s.createQuery(hql);
+            query.setParameter("name", name);
+            customer = (Customer) query.list().get(0);//name column is not-null
+            s.close();
 
         } catch (HibernateException e){
-            transaction.rollback();
-            logger.error("transaction terminated");
-        } finally {
+            logger.error("session close exception，try again");
             s.close();
         }
-        return res.get(0);
+        return customer;
+    }
+
+    public List<Customer> getCustomerWithOrders(){
+
+        String hql = "FROM Customer as c left join fetch c.orders";
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session s = sessionFactory.openSession();
+
+        List<Customer> res = new ArrayList<>();
+        try {
+            Query query = s.createQuery(hql);
+            res = query.list();
+            s.close();
+
+        } catch (HibernateException e){
+            logger.error("session close exception，try again");
+            s.close();
+        }
+        return res;
+
     }
 }

@@ -9,10 +9,12 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class OrderDaoImp implements OrderDao {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -82,5 +84,45 @@ public class OrderDaoImp implements OrderDao {
         }
 
         return false;
+    }
+
+    @Override
+    public List<Order> getOrdersWithCoffee() {
+        String hql = "FROM Order as o left join fetch o.coffeeList";
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        List<Order> res = new ArrayList<>();
+        try{
+            transaction = s.beginTransaction();
+            Query<Order> query = s.createQuery(hql);
+            res = query.list();
+            transaction.commit();
+        } catch (HibernateException e){
+            logger.error("Exception happened");
+            transaction.rollback();
+        } finally {
+            s.close();
+        }
+        return res;
+    }
+
+    @Override
+    public List<Order> getOrdersWithCustomer() {
+        String hql = "FROM Order as o left join fetch o.customer";
+        Session s = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        List<Order> res = new ArrayList<>();
+        try{
+            transaction = s.beginTransaction();
+            Query<Order> query = s.createQuery(hql);
+            res = query.list();
+            transaction.commit();
+        } catch (HibernateException e){
+            logger.error("Exception happened");
+            transaction.rollback();
+        } finally {
+            s.close();
+        }
+        return res;
     }
 }

@@ -3,6 +3,7 @@ package com.tzy.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "coffee")
@@ -18,6 +19,18 @@ public class Coffee {
 
     @Column(name = "type")
     private String type;
+
+    @ManyToMany(mappedBy = "coffeeList", fetch = FetchType.LAZY)
+    private List<Order> orderList;
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
+
 
     public long getId() {
         return id;

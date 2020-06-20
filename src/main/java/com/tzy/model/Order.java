@@ -1,5 +1,7 @@
 package com.tzy.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,11 +26,17 @@ public class Order {
     @Column(name = "total")
     private BigDecimal total;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "coffee_order",
     joinColumns = @JoinColumn(name = "order_id"),
     inverseJoinColumns = @JoinColumn(name = "coffee_id"))
     private List<Coffee> coffeeList;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 
 
@@ -72,11 +80,12 @@ public class Order {
         this.coffeeList = coffeeList;
     }
 
-    public void addCoffee(Coffee coffee){
-        if(coffeeList == null){
-            coffeeList = new ArrayList<>();
-        }
-        coffeeList.add(coffee);
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
 }

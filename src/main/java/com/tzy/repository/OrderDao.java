@@ -11,4 +11,8 @@ public interface OrderDao {
     Order save(Order order);
 
     boolean delete(Order order);
+
+    List<Order> getOrdersWithCoffee();
+
+    List<Order> getOrdersWithCustomer();
 }

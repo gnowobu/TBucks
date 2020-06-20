@@ -1,47 +1,46 @@
 package com.tzy.repository;
 
+import com.tzy.ApplicationBootstrap;
 import com.tzy.model.Coffee;
-import org.junit.After;
 import org.junit.Assert;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
-import java.util.List;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes= ApplicationBootstrap.class)
 public class CoffeeDaoTest {
 
-    CoffeeDao test;
-    private Coffee cof;
+    @Autowired
+    private CoffeeDao coffeeDao;
 
-    @BeforeEach
+    private Coffee coffee;
+
+    @Before
     public void setUp(){
-        test = new CoffeeDaoimpl();
 
-        cof = new Coffee();
-        cof.setId(4l);
-        cof.setPrice(new BigDecimal(12.341));
-        cof.setType("Americano");
-        test.save(cof);
-
+        coffee = new Coffee();
+        //cof.setId(4l);
+        coffee.setPrice(new BigDecimal(12.341));
+        coffee.setType("Americano");
+        coffeeDao.save(coffee);
     }
 
-    @AfterEach
+    @After
     public void tearDown(){
-        test.delete(cof);
-        test = null;
-
+        coffeeDao.delete(coffee);
+        coffeeDao = null;
     }
 
     @Test
     public void CoffeeDaoTest(){
-        test.getBy(4l);
-        Assert.assertEquals("Americano", cof.getType());
+        coffee = coffeeDao.getCoffee().get(0);
+        Assert.assertEquals("Americano", coffee.getType());
 
     }
-
-
-    
 }

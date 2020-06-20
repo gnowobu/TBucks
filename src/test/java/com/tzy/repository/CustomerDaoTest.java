@@ -1,48 +1,54 @@
 package com.tzy.repository;
-
-import com.tzy.jdbc.CustomerDAOjdbc;
+import com.tzy.ApplicationBootstrap;
 import com.tzy.model.Customer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
+import com.tzy.model.Order;
+import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = ApplicationBootstrap.class)
 public class CustomerDaoTest {
 
-    CustomerDAOjdbc dao;
-    @BeforeEach
-    void setUp() {
-        dao = new CustomerDAOjdbc();
+    @Autowired
+    private CustomerDao customerDao;
+
+    @Autowired
+    private OrderDao orderDao;
+
+    private Customer customer;
+
+    private Order order1, order2;
+
+    @Before
+    public void setUp() {
+        order1 = new Order();
+        order2 = new Order();
+        customer = new Customer();
+        customer.setName("test");
+        customer.setPassword("test");
+        customer.setEmail("test");
+        order1.setCustomer(customer);
+        order2.setCustomer(customer);
     }
 
-    @AfterEach
-    void tearDown() {
-        dao = null;
+    @After
+    public void tearDown() {
+        orderDao.delete(order1);
+        orderDao.delete(order2);
+        customerDao.delete(customer);
     }
 
 
     @Test
     public void getCustomerTest(){
 
-        assertEquals(2, dao.getCustomers().size());
-
-    }
-
-
-    @Test
-    public void createCustomerTest(){
-
-        Customer customer = new Customer();
-        customer.setId(2);
-        customer.setEmail("test@test.com");
-        customer.setPassword("123");
-        customer.setName("Test");
-
-        dao.createCustomer(customer);
-
-        Customer customer1 = dao.findById(1l);
-
-        assertEquals(1, customer1.getId());
+        Assert.assertEquals(customerDao.getCustomerWithOrders().size(), 2);
 
     }
 }
