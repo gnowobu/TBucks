@@ -33,16 +33,19 @@ public class OrderDaoTest {
         order = new Order();
         coffee1 = new Coffee();
         coffee2 = new Coffee();
+
         List<Coffee> coffeeList = new ArrayList<>();
         coffeeList.add(coffee1);
         coffeeList.add(coffee2);
+
         coffee1.setType("cappucino");
         coffee1.setPrice(BigDecimal.valueOf(15.00));
         coffee2.setType("Americano");
         coffee2.setPrice(BigDecimal.valueOf(18.00));
-        order.setCoffeeList(coffeeList);
         coffeeDao.save(coffee1);
         coffeeDao.save(coffee2);
+
+        order.setCoffeeList(coffeeList);
         order.setOrder_time(LocalDateTime.now());
         order.setStatus("1");
         order.setTotal(BigDecimal.valueOf(33));

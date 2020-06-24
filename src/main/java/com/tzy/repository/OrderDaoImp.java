@@ -5,10 +5,12 @@ import com.tzy.model.Order;
 import com.tzy.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -18,11 +20,14 @@ import java.util.List;
 public class OrderDaoImp implements OrderDao {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     @Override
     public List<Order> getOrders() {
 
         String hql = "FROM Order";
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction transaction = null;
         List<Order> res = new ArrayList<>();
         try{
@@ -43,7 +48,7 @@ public class OrderDaoImp implements OrderDao {
     public Order save(Order order) {
 
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try {
             transaction = s.beginTransaction();
@@ -65,7 +70,7 @@ public class OrderDaoImp implements OrderDao {
         String hql = "DELETE Order as order where order.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try{
             transaction = s.beginTransaction();
@@ -89,7 +94,7 @@ public class OrderDaoImp implements OrderDao {
     @Override
     public List<Order> getOrdersWithCoffee() {
         String hql = "FROM Order as o left join fetch o.coffeeList";
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction transaction = null;
         List<Order> res = new ArrayList<>();
         try{
@@ -109,7 +114,7 @@ public class OrderDaoImp implements OrderDao {
     @Override
     public List<Order> getOrdersWithCustomer() {
         String hql = "FROM Order as o left join fetch o.customer";
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction transaction = null;
         List<Order> res = new ArrayList<>();
         try{

@@ -13,19 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import javax.security.auth.login.AppConfigurationEntry;
-
-
 import java.io.File;
-import java.io.InputStream;
+
 import java.util.Properties;
-import java.util.Scanner;
+
 
 public class HibernateUtil {
-    private static SessionFactory sessionFactory; //singleton
-    private static Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
+    private SessionFactory sessionFactory; //singleton
+    private Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
 
-    public static SessionFactory getSessionFactory(){
+    public SessionFactory getSessionFactory(){
         if(sessionFactory == null){
             String[] modelPackages = {"com.tzy.model"};
             String dbDriver = System.getProperty("database.driver");
@@ -59,14 +56,14 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    public static void main(String[] args){
-
-        SessionFactory test = HibernateUtil.getSessionFactory();
-        logger.info("success " + test.hashCode());
-        Session s = test.openSession();//factory pattern
-        s.close();
-
-    }
+//    public static void main(String[] args){
+//
+//        SessionFactory test = HibernateUtil.getSessionFactory();
+//        logger.info("success " + test.hashCode());
+//        Session s = test.openSession();//factory pattern
+//        s.close();
+//
+//    }
 }
 
 

@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
@@ -16,13 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CoffeeDaoimpl implements CoffeeDao {
+public class CoffeeDaoImp implements CoffeeDao {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
     @Override
     public List<Coffee> getCoffee() {
         String hql = "FROM Coffee";
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session s = sessionFactory.openSession();
 
         List<Coffee> res = new ArrayList<>();
@@ -42,7 +46,7 @@ public class CoffeeDaoimpl implements CoffeeDao {
     public Coffee save(Coffee coffee) {
 
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try {
             transaction = s.beginTransaction();
@@ -65,7 +69,7 @@ public class CoffeeDaoimpl implements CoffeeDao {
         String hql = "DELETE Coffee as cof where cof.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try{
             transaction = s.beginTransaction();
@@ -91,7 +95,7 @@ public class CoffeeDaoimpl implements CoffeeDao {
         String hql = "FROM Coffee cof where cof.id = :Id";
         List<Coffee> res =  new ArrayList<>();
 
-        Session s =  HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = s.beginTransaction();

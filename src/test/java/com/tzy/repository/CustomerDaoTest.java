@@ -22,7 +22,6 @@ public class CustomerDaoTest {
     private OrderDao orderDao;
 
     private Customer customer;
-
     private Order order1, order2;
 
     @Before

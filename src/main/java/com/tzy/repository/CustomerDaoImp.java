@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,10 +20,12 @@ import java.util.List;
 public class CustomerDaoImp implements CustomerDao{
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     public List<Customer> getCustomer(){
 
         String hql = "FROM Customer";
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session s = sessionFactory.openSession();
 
         List<Customer> res = new ArrayList<>();
@@ -42,7 +45,7 @@ public class CustomerDaoImp implements CustomerDao{
     public Customer save(Customer customer){
 
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try {
             transaction = s.beginTransaction();
@@ -63,7 +66,7 @@ public class CustomerDaoImp implements CustomerDao{
         String hql = "DELETE Customer as c where c.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
-        Session s = HibernateUtil.getSessionFactory().openSession();
+        Session s = sessionFactory.openSession();
 
         try{
             transaction = s.beginTransaction();
@@ -86,8 +89,7 @@ public class CustomerDaoImp implements CustomerDao{
 
     public Customer getByName(String name){
 
-        String hql = "SELECT FROM Customer where name = :name";
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        String hql = "FROM Customer where name = :name";
         Session s = sessionFactory.openSession();
         Customer customer = new Customer();
 
@@ -95,7 +97,7 @@ public class CustomerDaoImp implements CustomerDao{
 
             Query query = s.createQuery(hql);
             query.setParameter("name", name);
-            customer = (Customer) query.list().get(0);//name column is not-null
+            customer = (Customer) query.uniqueResult();//name column is not-null
             s.close();
 
         } catch (HibernateException e){
@@ -108,7 +110,6 @@ public class CustomerDaoImp implements CustomerDao{
     public List<Customer> getCustomerWithOrders(){
 
         String hql = "FROM Customer as c left join fetch c.orders";
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session s = sessionFactory.openSession();
 
         List<Customer> res = new ArrayList<>();
@@ -123,5 +124,25 @@ public class CustomerDaoImp implements CustomerDao{
         }
         return res;
 
+    }
+
+    public Customer getById(Long id){
+
+        String hql = "FROM Customer where id =: id";
+        Session s = sessionFactory.openSession();
+        Customer customer = new Customer();
+
+        try {
+
+            Query query = s.createQuery(hql);
+            query.setParameter("id", id);
+            customer = (Customer) query.uniqueResult();//name column is not-null
+            s.close();
+
+        } catch (HibernateException e){
+            logger.error("session close exception，try again");
+            s.close();
+        }
+        return customer;
     }
 }
