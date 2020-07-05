@@ -2,14 +2,17 @@ package com.tzy.repository;
 
 import com.tzy.model.Coffee;
 import com.tzy.model.Customer;
-import com.tzy.util.HibernateUtil;
+import com.tzy.model.Order;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -49,7 +52,7 @@ public class CustomerDaoImp implements CustomerDao{
 
         try {
             transaction = s.beginTransaction();
-            s.save(customer);
+            s.saveOrUpdate(customer);
             transaction.commit();
             s.close();
             return customer;
@@ -61,6 +64,7 @@ public class CustomerDaoImp implements CustomerDao{
         }
 
     }
+
 
     public boolean delete(Customer customer){
         String hql = "DELETE Customer as c where c.id = :Id";//":Id" displays the id, "Id" is just a variable name.
@@ -89,7 +93,7 @@ public class CustomerDaoImp implements CustomerDao{
 
     public Customer getByName(String name){
 
-        String hql = "FROM Customer where name = :name";
+        String hql = "FROM Customer as c left join fetch c.orders where c.name = :name ";
         Session s = sessionFactory.openSession();
         Customer customer = new Customer();
 
@@ -126,6 +130,50 @@ public class CustomerDaoImp implements CustomerDao{
 
     }
 
+    @Override
+    public Customer getCustomerByOrder(Order order) {
+
+        String hql = "FROM Customer where id =: id";
+        Session s = sessionFactory.openSession();
+        Customer customer = new Customer();
+
+        try {
+
+            Query query = s.createQuery(hql);
+            query.setParameter("id", order.getCustomer().getId());
+            customer = (Customer) query.uniqueResult();//name column is not-null
+            s.close();
+
+        } catch (HibernateException e){
+            logger.error("session close exception，try again");
+            s.close();
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getCustomerByCredentials(String name, String password) {
+        String hql = "from Customer c where c.name =: name and c.password =: password";
+
+        Session s = sessionFactory.openSession();
+        Customer customer = new Customer();
+
+        Transaction transaction = null;
+        try {
+            transaction = s.beginTransaction();
+            Query<Customer> query = s.createQuery(hql);
+            query.setParameter("name",name);
+            query.setParameter("password",password);
+            customer = query.uniqueResult();
+            transaction.commit();
+        } catch (HibernateException e) {
+            transaction.rollback();
+            logger.error("session exception, try again");
+        }
+
+        return customer;
+    }
+
     public Customer getById(Long id){
 
         String hql = "FROM Customer where id =: id";
@@ -145,4 +193,6 @@ public class CustomerDaoImp implements CustomerDao{
         }
         return customer;
     }
+
+
 }

@@ -1,17 +1,11 @@
 package com.tzy.controller;
-
 import com.tzy.model.Customer;
 import com.tzy.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Id;
 import java.util.List;
 
 @RestController
@@ -23,7 +17,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "/findall", method = RequestMethod.GET)
     public List<Customer> getCustomers(){
 
         return customerService.getCustomer();
@@ -34,10 +28,32 @@ public class CustomerController {
         logger.debug("test success");
     }
 
+
     @RequestMapping(value = "/{Id}", method = RequestMethod.GET)
-    public void getCustomerById(@PathVariable(name = "Id") Long id){
-        logger.debug("id is: " + id);
+    public Customer getCustomerByName(@PathVariable(name = "Id") long id){
+        logger.debug("the id is: " + id);
+        return customerService.getById(id);
+    }
+
+    @RequestMapping(value = "/{Id}", method = RequestMethod.PATCH) //PATCH: to update a single attribute.(request parameter)
+    public Customer updateCustomerName(@PathVariable("Id") Long id, @RequestParam("name") String name){
+
+        Customer c = customerService.getById(id);
+        c.setName(name);
+        customerService.save(c);
+        return c;
+    }
+
+    @RequestMapping(value = "/post", method = RequestMethod.POST)//test data input
+    public void create(@RequestBody Customer customer){
+        customerService.save(customer);
     }
 
 
+    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    public boolean delete(@PathVariable(name = "id") Long id){ //delete by id
+        Customer customer = customerService.getById(id);
+        return customerService.delete(customer);
+
+    }
 }

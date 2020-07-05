@@ -1,6 +1,7 @@
 package com.tzy.repository;
 
 import com.tzy.model.Customer;
+import com.tzy.model.Order;
 
 
 import java.util.List;
@@ -8,15 +9,20 @@ import java.util.List;
 public interface CustomerDao {
     List<Customer> getCustomer();
 
+    List<Customer> getCustomerWithOrders();
+
     Customer save(Customer customer);
 
     boolean delete(Customer customer);
 
+    Customer getById(Long id);
+
     Customer getByName(String name);
 
-    List<Customer> getCustomerWithOrders();
+    Customer getCustomerByOrder(Order order);
 
-    Customer getById(Long id);
+    Customer getCustomerByCredentials(String name, String password);
+
 
 
 }

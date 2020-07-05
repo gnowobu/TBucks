@@ -1,7 +1,6 @@
 package com.tzy.repository;
 
 import com.tzy.model.Coffee;
-import com.tzy.util.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -42,26 +41,6 @@ public class CoffeeDaoImp implements CoffeeDao {
         return res;
     }
 
-    @Override
-    public Coffee save(Coffee coffee) {
-
-        Transaction transaction = null;
-        Session s = sessionFactory.openSession();
-
-        try {
-            transaction = s.beginTransaction();
-            s.save(coffee);
-            transaction.commit();
-            s.close();
-            return coffee;
-        } catch (Exception e){
-            if(transaction != null) transaction.rollback();
-            logger.error("failure to insert record", e);
-            s.close();
-            return null;
-        }
-
-    }
 
     @Override
     public boolean delete(Coffee coffee) {
@@ -91,7 +70,7 @@ public class CoffeeDaoImp implements CoffeeDao {
     }
 
     @Override
-    public Coffee getBy(Long id) {
+    public Coffee getById(Long id) {
         String hql = "FROM Coffee cof where cof.id = :Id";
         List<Coffee> res =  new ArrayList<>();
 
@@ -111,5 +90,21 @@ public class CoffeeDaoImp implements CoffeeDao {
             s.close();
         }
         return res.get(0);
+    }
+
+    @Override
+    public Coffee save(Coffee coffee) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(coffee);
+            transaction.commit();
+            return coffee;
+        }
+        catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            logger.error("failure to save or update record",e.getMessage());
+            return null;
+        }
     }
 }

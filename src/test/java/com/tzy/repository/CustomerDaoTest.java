@@ -50,4 +50,5 @@ public class CustomerDaoTest {
         Assert.assertEquals(customerDao.getCustomerWithOrders().size(), 2);
 
     }
+
 }

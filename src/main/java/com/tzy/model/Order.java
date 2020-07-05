@@ -32,8 +32,6 @@ public class Order {
     inverseJoinColumns = @JoinColumn(name = "coffee_id"))
     private List<Coffee> coffeeList;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;

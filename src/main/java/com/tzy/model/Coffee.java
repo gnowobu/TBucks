@@ -1,6 +1,8 @@
 package com.tzy.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Coffee {
     private String type;
 
     @ManyToMany(mappedBy = "coffeeList", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Order> orderList;
 
     public List<Order> getOrderList() {

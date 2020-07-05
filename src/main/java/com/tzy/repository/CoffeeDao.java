@@ -8,9 +8,10 @@ public interface CoffeeDao {
 
     List<Coffee> getCoffee();
 
-    Coffee save(Coffee coffee);
+    Coffee save(Coffee coffee); // save or update
 
     boolean delete(Coffee coffee);
 
-    Coffee getBy(Long id);
+    Coffee getById(Long id);
+
 }

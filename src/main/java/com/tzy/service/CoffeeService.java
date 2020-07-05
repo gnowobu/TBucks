@@ -23,8 +23,9 @@ public class CoffeeService {
     public boolean delete(Coffee coffee) {
         return coffeeDao.delete(coffee);
     }
-    Coffee getBy(Long id){
-        return coffeeDao.getBy(id);
+
+    Coffee getById(Long id){
+        return coffeeDao.getById(id);
     };
 
 

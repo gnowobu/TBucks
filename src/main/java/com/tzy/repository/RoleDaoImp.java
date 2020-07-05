@@ -1,7 +1,7 @@
 package com.tzy.repository;
-
 import com.tzy.model.Coffee;
-import com.tzy.model.Order;
+import com.tzy.model.Role;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,26 +16,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class OrderDaoImp implements OrderDao {
+public class RoleDaoImp implements RoleDao {
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Override
-    public List<Order> getOrders() {
-
-        String hql = "FROM Order";
+    public List<Role> findAllRoles() {
+        String hql = "FROM Role";
         Session s = sessionFactory.openSession();
+        List<Role> res = new ArrayList<>();
         Transaction transaction = null;
-        List<Order> res = new ArrayList<>();
+
         try{
             transaction = s.beginTransaction();
-            Query<Order> query = s.createQuery(hql);
+            Query<Role> query = s.createQuery(hql);
             res = query.list();
             transaction.commit();
         } catch (HibernateException e){
-            logger.error("Exception happened");
+            //logger.error("exception happened");
             transaction.rollback();
         } finally {
             s.close();
@@ -44,29 +45,33 @@ public class OrderDaoImp implements OrderDao {
     }
 
     @Override
-    public Order save(Order order) {
+    public Role getRoleByName(String name) {
+        return null;
+    }
+
+    @Override
+    public void save(Role role) {
 
         Transaction transaction = null;
         Session s = sessionFactory.openSession();
 
         try {
             transaction = s.beginTransaction();
-            s.saveOrUpdate(order);
+            s.saveOrUpdate(role);
             transaction.commit();
             s.close();
-            return order;
+
         } catch (Exception e){
             if(transaction != null) transaction.rollback();
             logger.error("failure to insert record", e);
             s.close();
-            return null;
         }
 
     }
 
     @Override
-    public boolean delete(Order order) {
-        String hql = "DELETE Order as order where order.id = :Id";//":Id" displays the id, "Id" is just a variable name.
+    public boolean delete(Role role) {
+        String hql = "DELETE Role as r where r.id = :Id";//":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
         Session s = sessionFactory.openSession();
@@ -74,7 +79,7 @@ public class OrderDaoImp implements OrderDao {
         try{
             transaction = s.beginTransaction();
             Query<Coffee> query = s.createQuery(hql);
-            query.setParameter("Id",order.getId());
+            query.setParameter("Id", role.getId());
             deletedCount = query.executeUpdate();
             transaction.commit();
             s.close();
@@ -89,46 +94,4 @@ public class OrderDaoImp implements OrderDao {
 
         return false;
     }
-
-    @Override
-    public List<Order> getOrdersWithCoffee() {
-        String hql = "FROM Order as o left join fetch o.coffeeList";
-        Session s = sessionFactory.openSession();
-        Transaction transaction = null;
-        List<Order> res = new ArrayList<>();
-        try{
-            transaction = s.beginTransaction();
-            Query<Order> query = s.createQuery(hql);
-            res = query.list();
-            transaction.commit();
-        } catch (HibernateException e){
-            logger.error("Exception happened");
-            transaction.rollback();
-        } finally {
-            s.close();
-        }
-        return res;
-    }
-
-    @Override
-    public List<Order> getOrdersWithCustomer() {
-        String hql = "FROM Order as o left join fetch o.customer";
-        Session s = sessionFactory.openSession();
-        Transaction transaction = null;
-        List<Order> res = new ArrayList<>();
-        try{
-            transaction = s.beginTransaction();
-            Query<Order> query = s.createQuery(hql);
-            res = query.list();
-            transaction.commit();
-        } catch (HibernateException e){
-            logger.error("Exception happened");
-            transaction.rollback();
-        } finally {
-            s.close();
-        }
-        return res;
-    }
-
-
 }
