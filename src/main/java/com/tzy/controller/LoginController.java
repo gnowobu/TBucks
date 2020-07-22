@@ -28,7 +28,6 @@ public class LoginController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String authentication(@RequestBody Customer customer){
 
-
         try{
             logger.debug("customer name: " + customer.getName());
             Customer c = customerService.getCustomerByCredentials(customer.getName(), customer.getPassword());
@@ -41,6 +40,5 @@ public class LoginController {
 
         return null;
     }
-
 
 }

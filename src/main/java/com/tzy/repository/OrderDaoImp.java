@@ -66,7 +66,7 @@ public class OrderDaoImp implements OrderDao {
 
     @Override
     public boolean delete(Order order) {
-        String hql = "DELETE Order as order where order.id = :Id";//":Id" displays the id, "Id" is just a variable name.
+        String hql = "DELETE Order as order where order.id = :Id";  //":Id" displays the id, "Id" is just a variable name.
         int deletedCount = 0;
         Transaction transaction = null;
         Session s = sessionFactory.openSession();

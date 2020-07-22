@@ -19,14 +19,13 @@ public class CustomerController {
 
     @RequestMapping(value = "/findall", method = RequestMethod.GET)
     public List<Customer> getCustomers(){
-
         return customerService.getCustomer();
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void test(){
-        logger.debug("test success");
-    }
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public void test(){
+//        logger.debug("test success");
+//    }
 
 
     @RequestMapping(value = "/{Id}", method = RequestMethod.GET)
@@ -35,7 +34,7 @@ public class CustomerController {
         return customerService.getById(id);
     }
 
-    @RequestMapping(value = "/{Id}", method = RequestMethod.PATCH) //PATCH: to update a single attribute.(request parameter)
+    @RequestMapping(value = "/update_name/{Id}", method = RequestMethod.PATCH) //PATCH: to update a single attribute.(request parameter)
     public Customer updateCustomerName(@PathVariable("Id") Long id, @RequestParam("name") String name){
 
         Customer c = customerService.getById(id);
@@ -44,14 +43,24 @@ public class CustomerController {
         return c;
     }
 
-    @RequestMapping(value = "/post", method = RequestMethod.POST)//test data input
+    @RequestMapping(value = "/update_email/{Id}")
+    public Customer updateCustomerEmail(@PathVariable("Id") Long id, @RequestParam("email") String email){
+
+        Customer c = customerService.getById(id);
+        c.setEmail(email);
+        customerService.save(c);
+        return c;
+
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)//test data input
     public void create(@RequestBody Customer customer){
         customerService.save(customer);
     }
 
 
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public boolean delete(@PathVariable(name = "id") Long id){ //delete by id
+    @RequestMapping(value="/{Id}", method = RequestMethod.DELETE)
+    public boolean delete(@PathVariable(name = "Id") Long id){ //delete by id
         Customer customer = customerService.getById(id);
         return customerService.delete(customer);
 

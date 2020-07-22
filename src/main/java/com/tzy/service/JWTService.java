@@ -1,6 +1,7 @@
 package com.tzy.service;
 
 import com.tzy.model.Customer;
+import com.tzy.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class JWTService {
@@ -37,8 +40,28 @@ public class JWTService {
         claims.setIssuedAt(new Date(System.currentTimeMillis()));
         claims.setIssuer(ISSUER);
         claims.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
-
         JwtBuilder builder = Jwts.builder().setClaims(claims).signWith(signatureAlgorithm, signingKey);
+
+
+        Set<Role> roles = customer.getRoles();
+        String allowedReadResources = "";
+        String allowedCreateResources = "";
+        String allowedUpdateResources = "";
+        String allowedDeleteResources = "";
+
+        //String allowedResource = roles.stream().map(role -> role.getAllowedResource()).collect(Collectors.joining(","));
+        for (Role role : roles) {
+            if (role.isAllowedRead()) allowedReadResources = String.join(role.getAllowedResource(), allowedReadResources, ",");
+            if (role.isAllowedCreate()) allowedCreateResources = String.join(role.getAllowedResource(), allowedCreateResources, ",");
+            if (role.isAllowedUpdate()) allowedUpdateResources = String.join(role.getAllowedResource(), allowedUpdateResources, ",");
+            if (role.isAllowedDelete()) allowedDeleteResources = String.join(role.getAllowedResource(), allowedDeleteResources, ",");
+        }
+
+        claims.put("allowedReadResources", allowedReadResources.replaceAll(",$", "")); //replace the last comma
+        claims.put("allowedCreateResources", allowedCreateResources.replaceAll(",$", ""));
+        claims.put("allowedUpdateResources", allowedUpdateResources.replaceAll(",$", ""));
+        claims.put("allowedDeleteResources", allowedDeleteResources.replaceAll(",$", ""));
+
 
         return builder.compact();
     }

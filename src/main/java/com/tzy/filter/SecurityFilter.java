@@ -24,6 +24,7 @@ public class SecurityFilter implements Filter {
 
     Logger logger = LoggerFactory.getLogger(getClass());
     private String AUTH_URI = "/login";
+    private String SIGN_UP_URI = "/sign_up";
 
     @Autowired
     JWTService jwtService;
@@ -47,12 +48,13 @@ public class SecurityFilter implements Filter {
 
     }
 
+
     private int authorization(HttpServletRequest req){
 
         int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
         String uri = req.getRequestURI();
         String verb = req.getMethod();
-        if(uri.equalsIgnoreCase(AUTH_URI)) return HttpServletResponse.SC_ACCEPTED;
+        if(uri.equalsIgnoreCase(AUTH_URI) || uri.equalsIgnoreCase(SIGN_UP_URI)) return HttpServletResponse.SC_ACCEPTED;
 
         try{
             String token = req.getHeader("Authorization").replaceAll("^(.*?) ", "");
@@ -62,8 +64,25 @@ public class SecurityFilter implements Filter {
             if(claims.getId() != null){
                 Customer c = customerService.getById(Long.valueOf(claims.getId())); // check if user exist
                 if(c == null) return statusCode;
-                statusCode = HttpServletResponse.SC_ACCEPTED;
+                //statusCode = HttpServletResponse.SC_ACCEPTED;
             }
+
+            String allowedResources = "/"; //role-based authorization
+            switch (verb){
+                case "GET"    : allowedResources = (String)claims.get("allowedReadResources");   break;
+                case "POST"   : allowedResources = (String)claims.get("allowedCreateResources"); break;
+                case "PUT"    : allowedResources = (String)claims.get("allowedUpdateResources"); break;
+                case "DELETE" : allowedResources = (String)claims.get("allowedDeleteResources"); break;
+            }
+
+            for (String s : allowedResources.split(",")) { //
+                if (uri.trim().toLowerCase().startsWith(s.trim().toLowerCase())) {
+                    statusCode = HttpServletResponse.SC_ACCEPTED;
+                    break;
+                }
+            }
+
+
         } catch(Exception e){
             logger.error("can't verify the token", e);
 

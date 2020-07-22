@@ -32,8 +32,11 @@ public class CustomerDaoTest {
         customer.setName("test");
         customer.setPassword("test");
         customer.setEmail("test");
+        customerDao.save(customer);
         order1.setCustomer(customer);
         order2.setCustomer(customer);
+        orderDao.save(order1);
+        orderDao.save(order2);
     }
 
     @After
@@ -47,7 +50,8 @@ public class CustomerDaoTest {
     @Test
     public void getCustomerTest(){
 
-        Assert.assertEquals(customerDao.getCustomerWithOrders().size(), 2);
+
+        Assert.assertEquals(customerDao.getCustomerByOrder(order1).getName(), "test");
 
     }
 
