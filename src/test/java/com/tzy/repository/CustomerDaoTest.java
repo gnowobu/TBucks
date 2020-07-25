@@ -2,10 +2,13 @@ package com.tzy.repository;
 import com.tzy.ApplicationBootstrap;
 import com.tzy.model.Customer;
 import com.tzy.model.Order;
+import com.tzy.model.Role;
 import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +24,12 @@ public class CustomerDaoTest {
     @Autowired
     private OrderDao orderDao;
 
+    @Autowired
+    private RoleDao roleDao;
+
     private Customer customer;
     private Order order1, order2;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Before
     public void setUp() {
@@ -37,6 +44,7 @@ public class CustomerDaoTest {
         order2.setCustomer(customer);
         orderDao.save(order1);
         orderDao.save(order2);
+
     }
 
     @After
@@ -48,11 +56,26 @@ public class CustomerDaoTest {
 
 
     @Test
-    public void getCustomerTest(){
-
+    public void getCustomerByOrderTest(){
 
         Assert.assertEquals(customerDao.getCustomerByOrder(order1).getName(), "test");
 
     }
 
+    @Test
+    public void getCustomerIDTest(){
+
+        long id = customerDao.getCustomerID("test","test");
+        System.out.println("id is: " + id);
+    }
+
+    @Test
+    public void addRoleTest(){
+
+        Role role = roleDao.getRoleByName("Manager");
+        long id = customerDao.getCustomerID(customer.getName(),customer.getEmail());
+        customer = customerDao.setCustomerRole(id,role);
+        Assert.assertEquals(customer.getRoles().size(),1);
+
+    }
 }

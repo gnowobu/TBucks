@@ -2,6 +2,7 @@ package com.tzy.repository;
 
 import com.tzy.model.Customer;
 import com.tzy.model.Order;
+import com.tzy.model.Role;
 
 
 import java.util.List;
@@ -22,6 +23,10 @@ public interface CustomerDao {
     Customer getCustomerByOrder(Order order);
 
     Customer getCustomerByCredentials(String name, String password);
+
+    Long getCustomerID(String name, String email);
+
+    Customer setCustomerRole(Long id, Role role);
 
 
 

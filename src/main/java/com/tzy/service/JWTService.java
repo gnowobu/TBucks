@@ -14,8 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JWTService {
@@ -49,7 +49,9 @@ public class JWTService {
         String allowedUpdateResources = "";
         String allowedDeleteResources = "";
 
-        //String allowedResource = roles.stream().map(role -> role.getAllowedResource()).collect(Collectors.joining(","));
+        //String allowedResource = roles.stream().map(Role::getAllowedResource).collect(Collectors.joining(","));
+
+
         for (Role role : roles) {
             if (role.isAllowedRead()) allowedReadResources = String.join(role.getAllowedResource(), allowedReadResources, ",");
             if (role.isAllowedCreate()) allowedCreateResources = String.join(role.getAllowedResource(), allowedCreateResources, ",");

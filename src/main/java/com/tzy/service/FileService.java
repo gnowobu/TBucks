@@ -1,7 +1,6 @@
 package com.tzy.service;
 
 import com.amazonaws.HttpMethod;
-import com.amazonaws.services.dynamodbv2.xspec.B;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
@@ -31,18 +30,6 @@ public class FileService {
     @Autowired
     private AmazonS3 amazonS3;
 
-//    public S3Service() {
-//
-//        amazonS3 = getS3ClientWithSuppliedCredentials();
-//    }
-
-
-//    private AmazonS3 getS3ClientUsingDefaultChain() {
-//        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-//                .withRegion(Regions.US_EAST_1)
-//                .build();
-//        return s3Client;
-//    }
 
     public Bucket createBucket(String bucketName) {
         Bucket bucket = null;

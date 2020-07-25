@@ -2,6 +2,7 @@ package com.tzy.service;
 
 import com.tzy.model.Customer;
 import com.tzy.model.Order;
+import com.tzy.model.Role;
 import com.tzy.repository.CustomerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,15 @@ public class CustomerService {
     public List<Customer> getCustomerWithOrders(){
         return customerDao.getCustomerWithOrders();
     }
+
+    public Customer setCustomerRole(long id, Role role){
+        return customerDao.setCustomerRole(id, role);
+    }
+
+    public Long getCustomerId(String name, String email){
+        return customerDao.getCustomerID(name, email);
+    }
+
 
     public Customer getCustomerByCredentials(String name, String password){
         return customerDao.getCustomerByCredentials(name, password);

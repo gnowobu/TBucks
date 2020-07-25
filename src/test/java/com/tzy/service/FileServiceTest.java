@@ -2,6 +2,7 @@ package com.tzy.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.tzy.ApplicationBootstrap;
@@ -17,6 +18,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,15 +55,15 @@ public class FileServiceTest {
     }
 
     @Test
-    public void testUploadwithUUID() throws IOException {
-
+    public void testUploadWithUUID() throws IOException {
+        String bucketName="testBucket";
         File file = new File("src/test/input.txt");
         FileInputStream input = new FileInputStream(file);
         multipartFile = new MockMultipartFile("file",
                 file.getName(), "text/plain", IOUtils.toByteArray(input));
-        
-        fileService.uploadFile("tommytao-s3-bucket1", multipartFile);
-        verify(amazonS3,times(1)).putObject(any(PutObjectRequest.class));
+
+        fileService.uploadFile(bucketName, multipartFile);
+        verify(amazonS3,times(1)).putObject(eq(bucketName),anyString(),any(ByteArrayInputStream.class),any(ObjectMetadata.class));
     }
 
 }

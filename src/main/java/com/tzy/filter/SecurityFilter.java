@@ -40,6 +40,7 @@ public class SecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
+        logger.info("inside the security filter");
         int status = authorization((HttpServletRequest) servletRequest);
         if(status == HttpServletResponse.SC_ACCEPTED) filterChain.doFilter(servletRequest, servletResponse);
         else
@@ -64,10 +65,10 @@ public class SecurityFilter implements Filter {
             if(claims.getId() != null){
                 Customer c = customerService.getById(Long.valueOf(claims.getId())); // check if user exist
                 if(c == null) return statusCode;
-                //statusCode = HttpServletResponse.SC_ACCEPTED;
             }
 
-            String allowedResources = "/"; //role-based authorization
+            String allowedResources = null;
+
             switch (verb){
                 case "GET"    : allowedResources = (String)claims.get("allowedReadResources");   break;
                 case "POST"   : allowedResources = (String)claims.get("allowedCreateResources"); break;
@@ -76,7 +77,8 @@ public class SecurityFilter implements Filter {
             }
 
             for (String s : allowedResources.split(",")) { //
-                if (uri.trim().toLowerCase().startsWith(s.trim().toLowerCase())) {
+
+                if (uri.trim().toLowerCase().startsWith(s.trim().toLowerCase()) && !s.equals("")) {
                     statusCode = HttpServletResponse.SC_ACCEPTED;
                     break;
                 }

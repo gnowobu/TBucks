@@ -46,7 +46,24 @@ public class RoleDaoImp implements RoleDao {
 
     @Override
     public Role getRoleByName(String name) {
-        return null;
+        Session s = sessionFactory.openSession();
+        String hql = "FROM Role where name = :name ";
+        Role role = null;
+
+        try{
+
+            Query<Role> query = s.createQuery(hql);
+            query.setParameter("name",name);
+            role = query.uniqueResult();
+
+        } catch (HibernateException e){
+            logger.error("exception happened");
+
+        } finally {
+            s.close();
+        }
+
+        return role;
     }
 
     @Override

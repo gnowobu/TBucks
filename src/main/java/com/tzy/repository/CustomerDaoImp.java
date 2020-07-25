@@ -4,6 +4,7 @@ import com.tzy.model.Coffee;
 import com.tzy.model.Customer;
 import com.tzy.model.Order;
 
+import com.tzy.model.Role;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -153,24 +154,67 @@ public class CustomerDaoImp implements CustomerDao{
 
     @Override
     public Customer getCustomerByCredentials(String name, String password) {
-        String hql = "from Customer c where c.name =: name and c.password =: password";
+        String hql = "from Customer c where lower(c.name)= :name and c.password = :password";
 
         Session s = sessionFactory.openSession();
-        Customer customer = new Customer();
-
-        Transaction transaction = null;
+        Customer customer = null;
+        //Transaction transaction = null;
         try {
-            transaction = s.beginTransaction();
+//            transaction = s.beginTransaction();
             Query<Customer> query = s.createQuery(hql);
-            query.setParameter("name",name);
+            query.setParameter("name",name.toLowerCase().trim());
             query.setParameter("password",password);
             customer = query.uniqueResult();
-            transaction.commit();
+            s.close();
+            //transaction.commit();
         } catch (HibernateException e) {
-            transaction.rollback();
+            //transaction.rollback();
             logger.error("session exception, try again");
         }
 
+        return customer;
+    }
+
+    @Override
+    public Long getCustomerID(String name, String email) {
+
+
+        String hql = "from Customer c where lower(c.name)= :name and c.email = :email";
+
+        Session s = sessionFactory.openSession();
+        Customer customer = null;
+
+        try {
+            Query<Customer> query = s.createQuery(hql);
+            query.setParameter("name",name.toLowerCase().trim());
+            query.setParameter("email",email);
+            customer = query.uniqueResult();
+            s.close();
+        } catch (HibernateException e) {
+            logger.error("session exception, try again");
+            s.close();
+        }
+        return customer.getId();
+    }
+
+    @Override
+    public Customer setCustomerRole(Long id, Role role) {
+
+        String hql = "from Customer c where c.id = :id";
+
+        Session s = sessionFactory.openSession();
+        Customer customer = null;
+        try {
+            Query<Customer> query = s.createQuery(hql);
+            query.setParameter("id",id);
+            customer = query.uniqueResult();
+            customer.addRole(role);
+            s.saveOrUpdate(customer);
+        } catch (HibernateException e) {
+            logger.error("session exception, try again");
+        } finally {
+            s.close();
+        }
         return customer;
     }
 
