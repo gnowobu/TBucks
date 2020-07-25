@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class CustomerDaoImp implements CustomerDao{
@@ -201,14 +203,19 @@ public class CustomerDaoImp implements CustomerDao{
     public Customer setCustomerRole(Long id, Role role) {
 
         String hql = "from Customer c where c.id = :id";
-
-        Session s = sessionFactory.openSession();
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
         Customer customer = null;
+        Session s = sessionFactory.openSession();
+
+
         try {
             Query<Customer> query = s.createQuery(hql);
             query.setParameter("id",id);
+
             customer = query.uniqueResult();
-            customer.addRole(role);
+            customer.setRoles(roleSet);
+
             s.saveOrUpdate(customer);
         } catch (HibernateException e) {
             logger.error("session exception, try again");

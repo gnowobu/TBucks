@@ -30,6 +30,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Order> orders;
 
+
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "customer_role",
             joinColumns = @JoinColumn(name = "customer_id"),
@@ -79,6 +81,10 @@ public class Customer {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
