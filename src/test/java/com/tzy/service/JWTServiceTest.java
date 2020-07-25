@@ -1,8 +1,7 @@
-package service;
+package com.tzy.service;
 
 import com.tzy.ApplicationBootstrap;
 import com.tzy.model.Customer;
-import com.tzy.service.JWTService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
