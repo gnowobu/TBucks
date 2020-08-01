@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationBootstrap.class)
 public class CustomerDaoTest {
@@ -73,9 +74,29 @@ public class CustomerDaoTest {
     public void addRoleTest(){
 
         Role role = roleDao.getRoleByName("Manager");
-        long id = customerDao.getCustomerID(customer.getName(),customer.getEmail());
+        long id = customer.getId();
         customer = customerDao.setCustomerRole(id,role);
-        Assert.assertEquals(customer.getRoles().size(),1);
+        Assert.assertEquals(customerDao.getById(id).getRoles().size(),1);
 
     }
+
+//    @Test //test method written by ryo. DAO
+//    public void addRoleTest(){
+////        customer customer = new customer();
+//        Set<Role> roles = new HashSet<>();
+//        customer.setRoles(roles);
+//        customer.setName("jfang");
+//
+//        customer.setEmail("jfang@ascending.com");
+//        customer.setPassword("jfang123!@#$");
+//        customerDao.save(customer);
+//        assertTrue(customer.getId()>0);
+//        Customer result = customerDao.getById(customer.getId());
+//        Assert.assertEquals(result.getRoles().size(),0);
+//        roles.add(roleDao.getRoleByName("Admin"));
+//        customer.setRoles(roles);
+//        customerDao.save(customer);
+//        result = customerDao.getById(customer.getId());
+//        Assert.assertEquals(result.getRoles().size(),1);
+//    }
 }

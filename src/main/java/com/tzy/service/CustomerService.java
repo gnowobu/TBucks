@@ -43,13 +43,14 @@ public class CustomerService {
         return customerDao.getCustomerWithOrders();
     }
 
-    public Customer setCustomerRole(long id, Role role){
+    public Customer setCustomerRole(Long id, Role role){
+
         return customerDao.setCustomerRole(id, role);
     }
 
-    public Long getCustomerId(String name, String email){
-        return customerDao.getCustomerID(name, email);
-    }
+    //public Long getCustomerId(String name, String email){
+        //return customerDao.getCustomerID(name, email);
+    //}
 
 
     public Customer getCustomerByCredentials(String name, String password){

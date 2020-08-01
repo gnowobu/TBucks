@@ -203,22 +203,26 @@ public class CustomerDaoImp implements CustomerDao{
     public Customer setCustomerRole(Long id, Role role) {
 
         String hql = "from Customer c where c.id = :id";
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(role);
+        Set<Role> roleSet;
         Customer customer = null;
         Session s = sessionFactory.openSession();
-
-
+        Transaction transaction = null;
         try {
+
+            transaction = s.beginTransaction(); //here the transaction can't be omitted. Otherwise Hibernate can't recognize the objects from db query.
             Query<Customer> query = s.createQuery(hql);
             query.setParameter("id",id);
 
             customer = query.uniqueResult();
+            roleSet = customer.getRoles();
+            roleSet.add(role);
             customer.setRoles(roleSet);
 
-            s.saveOrUpdate(customer);
+            s.save(customer); //both save() or saveOrUpdate() work.
+            transaction.commit();
         } catch (HibernateException e) {
             logger.error("session exception, try again");
+            transaction.rollback();
         } finally {
             s.close();
         }

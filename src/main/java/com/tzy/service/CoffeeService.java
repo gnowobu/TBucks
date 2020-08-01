@@ -24,9 +24,11 @@ public class CoffeeService {
         return coffeeDao.delete(coffee);
     }
 
-    Coffee getById(Long id){
+    public Coffee getById(Long id){
         return coffeeDao.getById(id);
     };
+
+
 
 
 }

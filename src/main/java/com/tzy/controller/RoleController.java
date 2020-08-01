@@ -17,11 +17,13 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-    @RequestMapping(value = "/setRole/{ID}", method = RequestMethod.POST)
-    public Customer setRole(@PathVariable("ID") Long id, @RequestParam("role") String role){
+    @RequestMapping(value = "/setRole/{Id}", method = RequestMethod.POST)
+    public Customer setRole(@PathVariable(name = "Id") long id, @RequestParam("role") String role){ //modify a customer/user's role
 
         Role r = roleService.getRoleByName(role);
         return customerService.setCustomerRole(id, r);
     }
+
+
 
 }

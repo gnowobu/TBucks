@@ -4,6 +4,8 @@ import com.tzy.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +30,9 @@ public class CustomerController {
 //    }
 
 
+    @Cacheable(value = "customers")
     @RequestMapping(value = "/{Id}", method = RequestMethod.GET)
-    public Customer getCustomerByName(@PathVariable(name = "Id") long id){
+    public Customer getCustomerById(@PathVariable(name = "Id") long id){
         logger.debug("the id is: " + id);
         return customerService.getById(id);
     }
@@ -53,9 +56,11 @@ public class CustomerController {
 
     }
 
+
+    @CachePut(value = "customers", key = "#customer.id") //write through
     @RequestMapping(value = "/create", method = RequestMethod.POST)//test data input
-    public void create(@RequestBody Customer customer){
-        customerService.save(customer);
+    public Customer create(@RequestBody Customer customer){
+        return customerService.save(customer);
     }
 
 

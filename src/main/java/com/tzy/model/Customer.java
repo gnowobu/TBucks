@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -105,7 +107,7 @@ public class Customer {
             roles = new HashSet<>();
 
         roles.add(role);
-        //role.getCustomers().add(this);
+        role.getCustomers().add(this);
     }
 }
 
