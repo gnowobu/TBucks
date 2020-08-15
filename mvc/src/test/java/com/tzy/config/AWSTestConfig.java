@@ -37,7 +37,4 @@ public class AWSTestConfig {
 
         return amazonSQS;
     }
-
-    StringBuffer sb = new StringBuffer("");
-    StringBuilder sb1 = new StringBuilder("");
 }

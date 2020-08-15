@@ -3,13 +3,11 @@ package com.tzy.controller;
 import com.tzy.service.CustomerService;
 import com.tzy.service.JWTService;
 import com.tzy.model.Customer;
+import com.tzy.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**1.validate user exists in db
@@ -24,6 +22,9 @@ public class LoginController {
     @Autowired private JWTService jwtService;
 
     @Autowired private CustomerService customerService;
+
+    @Autowired
+    private MessageService messageService;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String authentication(@RequestBody Customer customer){
@@ -40,5 +41,12 @@ public class LoginController {
 
         return null;
     }
+
+    @RequestMapping(value = "/msg", method = RequestMethod.POST)
+    public void sendMessageTo(@RequestParam(name = "phone") String phoneNumber){
+        messageService.sendMessage(phoneNumber,1);
+    }
+
+
 
 }

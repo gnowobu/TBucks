@@ -7,6 +7,7 @@
   <groupId>com.ziyitao</groupId>
   <artifactId>mvc</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
 
   <name>TBucks-mvc</name>
   <!-- FIXME change it to the project's website -->
@@ -57,13 +58,12 @@
       <version>6.4.2</version>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.slf4j</groupId>-->
-<!--      <artifactId>slf4j-simple</artifactId>-->
-<!--      <version>1.7.26</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -124,7 +124,7 @@
           <version>6.4.2</version>
           <configuration>
             <driver>org.postgresql.Driver</driver>
-            <url>jdbc:postgresql://localhost:5432/TBucks</url>
+            <url>${database.url}</url>
             <user>test</user>
             <password>test</password>
             <schemas>

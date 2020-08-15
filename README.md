@@ -24,6 +24,6 @@ Reference to Postgres docker [image](https://hub.docker.com/_/postgres) for envi
 docker run --name TBucks -e POSTGRES_USER=${username} -e POSTGRES_PASSWORD=${password} -e POSTGRES_DB=${databaseName} -p 5431:5432 -d postgres
 ```
 ### migrate database schema
-Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you can click the link to find the [migration schema](src/main/resources/db/migration)
+Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you can click the link to find the [migration schema](mvc/src/main/resources/db/migration)
 
     mvn clean complile flyway: migrate

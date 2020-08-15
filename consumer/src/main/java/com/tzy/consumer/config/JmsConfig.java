@@ -19,6 +19,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
 import javax.jms.Session;
+import java.util.Stack;
 
 @Configuration
 @EnableJms
@@ -40,7 +41,10 @@ public class JmsConfig {
                 sqsClient
         );
         return connectionFactory;
+
+
     }
+
 
 
     @Bean

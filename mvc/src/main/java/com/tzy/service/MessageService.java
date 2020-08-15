@@ -21,16 +21,19 @@ public class MessageService {
 
     private String queueName = "TBucks-standard-queue";
 
+
+    public MessageService (@Autowired AmazonSQS sqsClient){
+        this.sqsClient = sqsClient;
+        this.queueUrl = getQueueUrl(queueName);
+    }
+
     public String getQueueUrl(String queueName) {
         GetQueueUrlResult getQueueUrlResult = sqsClient.getQueueUrl(queueName);
         logger.info("QueueUrl: " + getQueueUrlResult.getQueueUrl());
         return getQueueUrlResult.getQueueUrl();
     }
 
-    public MessageService (@Autowired AmazonSQS sqsClient){
-        this.sqsClient = sqsClient;
-        this.queueUrl = getQueueUrl(queueName);
-   }
+
 
     public void sendMessage(String messageBody, int delaySeconds){
         SendMessageRequest sendMsgRequest = new SendMessageRequest()
