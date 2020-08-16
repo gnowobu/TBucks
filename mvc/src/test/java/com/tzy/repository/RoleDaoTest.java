@@ -69,7 +69,8 @@ public class RoleDaoTest {
     @Test
     public void getRoleCustomerTest(){
 
-        Assert.assertEquals(customerDao.getByName("test").getRoles().size(), 2);
+        Customer customer = customerDao.getByName("test");
+        Assert.assertEquals(customer.getRoles().size(), 2);
 
     }
 

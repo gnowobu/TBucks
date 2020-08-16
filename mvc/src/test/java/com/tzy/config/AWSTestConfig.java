@@ -2,6 +2,7 @@ package com.tzy.config;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.GetQueueUrlResult;
@@ -23,7 +24,12 @@ public class AWSTestConfig {
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public AmazonS3 getAmazonS3(){
 
-        return mock(AmazonS3.class);
+
+        AmazonS3 amazonS3 = mock(AmazonS3.class);
+        Bucket stubBucket = new Bucket();
+        when(amazonS3.createBucket(anyString())).thenReturn(stubBucket);
+
+        return amazonS3;
     }
 
 

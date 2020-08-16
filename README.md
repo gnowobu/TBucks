@@ -26,4 +26,5 @@ docker run --name TBucks -e POSTGRES_USER=${username} -e POSTGRES_PASSWORD=${pas
 ### migrate database schema
 Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you can click the link to find the [migration schema](mvc/src/main/resources/db/migration)
 
-    mvn clean complile flyway: migrate
+    mvn clean complile flyway: migrate -Ddatabse.url -Ddatabase.name -Ddatabase.user -Ddatabase.password
+    

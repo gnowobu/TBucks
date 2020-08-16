@@ -107,7 +107,7 @@ public class Customer implements Serializable {
             roles = new HashSet<>();
 
         roles.add(role);
-        role.getCustomers().add(this);
+//        role.getCustomers().add(this);
     }
 }
 

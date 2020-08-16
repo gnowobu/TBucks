@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.tzy.ApplicationBootstrap;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,12 +38,15 @@ public class FileServiceTest {
     @Autowired
     private AmazonS3 amazonS3;
 
+    private String bucketName = "tommytao-s3-bucket-10"; //bucket name must be unique across the server
+
     private MultipartFile multipartFile;
 
     @Test
     public void testCreateBucket() {
-        String bucketName = "tommytao-s3-bucket-6"; //bucket name must be unique across the server
+
         Bucket bucket = fileService.createBucket(bucketName);
+
         Assert.assertNotNull(bucket);
     }
 
@@ -57,13 +61,19 @@ public class FileServiceTest {
     @Test
     public void testUploadWithUUID() throws IOException {
         String bucketName="testBucket";
-        File file = new File("mvc/src/test/input.txt");
+        File file = new File("/Users/mac/IdeaProjects/TBucks/mvc/src/test/input.txt");
         FileInputStream input = new FileInputStream(file);
         multipartFile = new MockMultipartFile("file",
                 file.getName(), "text/plain", IOUtils.toByteArray(input));
 
         fileService.uploadFile(bucketName, multipartFile);
         verify(amazonS3,times(1)).putObject(eq(bucketName),anyString(),any(ByteArrayInputStream.class),any(ObjectMetadata.class));
+    }
+
+    @After
+    public void tearDown(){
+
+        fileService.deleteBucket(bucketName);
     }
 
 }

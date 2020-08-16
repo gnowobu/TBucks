@@ -80,6 +80,10 @@ public class FileService {
         generatePresignedUrlRequest.withMethod(HttpMethod.GET);
         generatePresignedUrlRequest.withExpiration(Date.from(expiration.toInstant(ZoneOffset.UTC)));
 
-        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();}
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    }
 
+    public void deleteBucket(String bucketName){
+        amazonS3.deleteBucket(bucketName);
+    }
 }

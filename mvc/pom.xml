@@ -78,20 +78,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.4.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.4.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
@@ -155,7 +141,13 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>2.22.1</version>
+
+<!--          <configuration>-->
+<!--            <includes>-->
+<!--              <include>*Test.*</include>-->
+<!--            </includes>-->
+<!--          </configuration>-->
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
