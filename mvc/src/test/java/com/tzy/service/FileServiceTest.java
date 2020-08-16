@@ -61,7 +61,7 @@ public class FileServiceTest {
     @Test
     public void testUploadWithUUID() throws IOException {
         String bucketName="testBucket";
-        File file = new File("/Users/mac/IdeaProjects/TBucks/mvc/src/test/input.txt");
+        File file = new File("src/test/input.txt");
         FileInputStream input = new FileInputStream(file);
         multipartFile = new MockMultipartFile("file",
                 file.getName(), "text/plain", IOUtils.toByteArray(input));
