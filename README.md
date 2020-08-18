@@ -28,3 +28,6 @@ Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you 
 
     mvn clean complile flyway: migrate -Ddatabse.url -Ddatabase.name -Ddatabase.user -Ddatabase.password
     
+    
+### test command line
+    mvn test -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql://172.17.0.2:5432/TBucks -Ddatabase.user=test -Ddatabase.password=test -Dspring.profiles.active=unit -Dkey=test
