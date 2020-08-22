@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -17,8 +18,8 @@ import org.springframework.context.annotation.Scope;
 @Profile({"dev","prod"})
 public class AWSConfig {
 
-    //private String myAWSAccessKeyId = System.getProperty("AWSkey");
-    //private String myAWSSecretKey = System.getProperty("AWSsecretkey");
+//    private String myAWSAccessKeyId = System.getProperty("AWSkey");
+//    private String myAWSSecretKey = System.getProperty("AWSsecretkey");
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)

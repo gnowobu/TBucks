@@ -30,6 +30,7 @@ public class CustomerDaoTest {
 
     private Customer customer;
     private Order order1, order2;
+    private Role role;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Before
@@ -46,6 +47,15 @@ public class CustomerDaoTest {
         orderDao.save(order1);
         orderDao.save(order2);
 
+        role = new Role();
+        role.setName("role1_manager");
+        role.setAllowedCreate(true);
+        role.setAllowedDelete(true);
+        role.setAllowedRead(true);
+        role.setAllowedResource("yes");
+        role.setAllowedUpdate(true);
+        roleDao.save(role);
+
     }
 
     @After
@@ -53,6 +63,7 @@ public class CustomerDaoTest {
         orderDao.delete(order1);
         orderDao.delete(order2);
         customerDao.delete(customer);
+        roleDao.delete(role);
     }
 
 
@@ -73,30 +84,11 @@ public class CustomerDaoTest {
     @Test
     public void addRoleTest(){
 
-        Role role = roleDao.getRoleByName("Manager");
+        Role role = roleDao.getRoleByName("role1_manager");
         long id = customer.getId();
         customer = customerDao.setCustomerRole(id,role);
         Assert.assertEquals(customerDao.getById(id).getRoles().size(),1);
 
     }
 
-//    @Test //test method written by ryo. DAO
-//    public void addRoleTest(){
-////        customer customer = new customer();
-//        Set<Role> roles = new HashSet<>();
-//        customer.setRoles(roles);
-//        customer.setName("jfang");
-//
-//        customer.setEmail("jfang@ascending.com");
-//        customer.setPassword("jfang123!@#$");
-//        customerDao.save(customer);
-//        assertTrue(customer.getId()>0);
-//        Customer result = customerDao.getById(customer.getId());
-//        Assert.assertEquals(result.getRoles().size(),0);
-//        roles.add(roleDao.getRoleByName("Admin"));
-//        customer.setRoles(roles);
-//        customerDao.save(customer);
-//        result = customerDao.getById(customer.getId());
-//        Assert.assertEquals(result.getRoles().size(),1);
-//    }
 }
