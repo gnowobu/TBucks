@@ -30,4 +30,4 @@ Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you 
     
     
 ### test command line
-    mvn test -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql://172.17.0.2:5432/TBucks -Ddatabase.user=test -Ddatabase.password=test -Dspring.profiles.active=unit -Dkey=test
+    mvn test -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql:${DB_URL}:5432/${DB_NAME} -Ddatabase.user=${DB_USER} -Ddatabase.password=${DB_PASSWORD} -Dspring.profiles.active=unit -Dkey=test
