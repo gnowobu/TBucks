@@ -26,7 +26,7 @@ docker run --name TBucks -e POSTGRES_USER=${username} -e POSTGRES_PASSWORD=${pas
 ### migrate database schema
 Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you can click the link to find the [migration schema](mvc/src/main/resources/db/migration)
 
-    mvn clean compile flyway:migrate -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql://172.17.0.2:5432/test_0825 -Ddatabase.user=test -Ddatabase.password=test
+    mvn clean compile flyway:migrate -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql:${DB_URL}:5432/${DB_NAME} -Ddatabase.user=${DB_USER} -Ddatabase.password=${DB_PASSWORD}
     
     
 ### test command line
