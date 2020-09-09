@@ -43,7 +43,7 @@ Refer to flyway setup [documentation](https://flywaydb.org/documentation/), you 
 
 - Run test with following command. Make sure to add dependency for JUnit and Mockito
 ```
-mvn test -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql://172.17.0.2:5432/TBucks -Ddatabase.user=test -Ddatabase.password=test -Dspring.profiles.active=unit -Dkey=test
+mvn test -Ddatabase.driver=org.postgresql.Driver -Ddatabase.dialect=org.hibernate.dialect.PostgreSQL9Dialect -Ddatabase.url=jdbc:postgresql://localhost:5432/TBucks -Ddatabase.user=${DB_NAME} -Ddatabase.password=${DB_PASSWORD} -Dspring.profiles.active=unit -Dkey=test
 ```
 
 ## Packaging
