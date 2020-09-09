@@ -1,7 +1,5 @@
 # TBucks: A management system for coffee shops
 
-# TBucks: A management system for coffee shops
-
 ## Description
 This project created a system for online coffee shops, enabling customers to order online
 and the coffee shop owner to manage the business as well.
