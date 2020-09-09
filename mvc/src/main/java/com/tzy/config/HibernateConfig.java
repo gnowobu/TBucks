@@ -13,4 +13,6 @@ public class HibernateConfig {
         HibernateUtil hibernateUtil = new HibernateUtil();
         return hibernateUtil.getSessionFactory();
     }
+
+
 }

@@ -1,10 +1,12 @@
 package com.tzy.service;
 
+import com.tzy.model.Customer;
 import com.tzy.model.Order;
 import com.tzy.repository.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,7 +31,13 @@ public class OrderService {
         return orderDao.getOrdersWithCoffee();
     }
 
-    public List<Order> getOrdersWithCustomer(){
-        return orderDao.getOrdersWithCustomer();
+    public List<Order> getOrdersWithCustomer(Customer customer){
+
+        List<Order> orderList = orderDao.getOrdersWithCustomer();
+        List<Order> res = new ArrayList<>();
+        for(Order order: orderList){
+            if(order.getCustomer() != null && order.getCustomer().equals(customer)) res.add(order);
+        }
+        return res;
     }
 }

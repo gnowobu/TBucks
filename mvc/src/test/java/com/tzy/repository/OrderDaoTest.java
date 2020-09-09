@@ -61,6 +61,7 @@ public class OrderDaoTest {
 
     @Test
     public void orderDaoTest(){
+        orderDao.getOrdersWithCoffee().get(0).getCoffeeList();
         Assert.assertEquals(orderDao.getOrdersWithCoffee().get(0).getCoffeeList().size(), 2);//left join if using lazy fetch
     }
 }
