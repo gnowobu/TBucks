@@ -56,8 +56,8 @@ mvn clean compile package -DskipTests=true
 ## CI/CD
 You should have completed the following stages before you work with DevOps engineer.
 
-  * Upload source code to GitHub repository
-  * Fulfill unit test stage in docker container
+  1. Upload source code to GitHub repository
+  1. Fulfill unit test stage in docker container
         >Use `Docker` to pull `Maven` image and run an interactive container.
         >
             docker pull maven:3.6.0-jdk-8
