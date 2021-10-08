@@ -26,7 +26,9 @@ public class MessageServiceTest {
     public void MessasgeSendTest(){
 
         messageService.sendMessage("test",1);
-        Assert.assertTrue(true);
+        // Assert.assertTrue(true);
+        verify(sqsClient, times(1)).sendMessage("test",1);
+        
     }
 
 

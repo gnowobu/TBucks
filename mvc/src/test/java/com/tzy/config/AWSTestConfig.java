@@ -24,14 +24,12 @@ public class AWSTestConfig {
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public AmazonS3 getAmazonS3(){
 
-
         AmazonS3 amazonS3 = mock(AmazonS3.class);
         Bucket stubBucket = new Bucket();
         when(amazonS3.createBucket(anyString())).thenReturn(stubBucket);
 
         return amazonS3;
     }
-
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
